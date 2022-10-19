@@ -9,16 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private ArrayList<Camera> cameraList;
 
-    public recyclerAdapter(ArrayList<Camera> cameraList){
+    public RecyclerAdapter(ArrayList<Camera> cameraList){
         this.cameraList = cameraList;
     }
+    
+    
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView IPAddressText;
@@ -31,11 +31,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             portText = itemView.findViewById(R.id.portText);
 
             itemView.findViewById(R.id.liveFootageButton).setOnClickListener(view -> {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//                String line = null;
-//                while ((line = in.readLine()) != null) {
-//                    myLineProcess(line); //here you process you line result
-//                }
                 Log.d("demo", ""+camera.getIPAddress());
             });
         }
@@ -43,13 +38,13 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
     @NonNull
     @Override
-    public recyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_items, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull recyclerAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
         //setting IPAddress to text view
         String IPAddress = cameraList.get(position).getIPAddress();
         holder.IPAddressText.setText(IPAddress);

@@ -14,3 +14,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "iSeeYou2"
 include ':app'
+
+include ':java'
+
+include ':java'
