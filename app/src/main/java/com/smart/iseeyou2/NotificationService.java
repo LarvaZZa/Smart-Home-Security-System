@@ -3,8 +3,10 @@ package com.smart.iseeyou2;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -58,6 +60,8 @@ public class NotificationService extends FirebaseMessagingService {
         sendNotification(remoteMessage.getNotification().getBody());
     }
 
+    NotificationManager notificationManager;
+
     private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -65,29 +69,52 @@ public class NotificationService extends FirebaseMessagingService {
                 PendingIntent.FLAG_IMMUTABLE);
 
         String channelId = "fcm_default_channel";
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_stat_alert)
                         .setContentTitle("!ACTIVITY ALERT!")
                         .setContentText(messageBody)
                         .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
+                        .setSound(soundUri)
                         .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
+        notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(channelId,
+//                    "Channel human readable title",
+//                    NotificationManager.IMPORTANCE_DEFAULT);
+//            notificationManager.createNotificationChannel(channel);
+//        }
+
+        createNotificationChannel();
+
+        //notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void createNotificationChannel() {
+        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + this.getPackageName() + "/" + R.raw.sentry); //Here is FILE_NAME is the name of file that you want to play
+// Create the NotificationChannel, but only on API 26+ because
+// the NotificationChannel class is new and not in the support library if
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence name = "mychannel";
+            String description = "testing";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build();
+            NotificationChannel channel = new NotificationChannel("cnid", name, importance);
+            channel.setDescription(description);
+            channel.enableLights(true); channel.enableVibration(true);
+            channel.setSound(sound, audioAttributes);
             notificationManager.createNotificationChannel(channel);
         }
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
+    };
 
 
 }

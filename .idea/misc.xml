@@ -4,9 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/drawable-anydpi-v24/ic_stat_alert.xml" value="0.302" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/drawable-xhdpi/background.xml" value="0.3675" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/drawable-xhdpi/web_background.xml" value="0.3675" />
         <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/activity_main_page.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/activity_webpage.xml" value="0.358695652173913" />
         <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/camera_activity.xml" value="0.358695652173913" />
         <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/list_items.xml" value="0.33" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/list_items_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/layout/popup.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jurgi/AndroidStudioProjects/iSeeYou2/app/src/main/res/xml/network_security_config.xml" value="0.358695652173913" />
       </map>
     </option>

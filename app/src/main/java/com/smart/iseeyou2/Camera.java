@@ -2,26 +2,27 @@ package com.smart.iseeyou2;
 
 public class Camera {
     private String IPAddress;
-    private String port;
+    private String name;
 
-    public Camera(String IPAddress, String port){
+    public Camera(String IPAddress, String name){
         this.IPAddress = IPAddress;
-        this.port = port;
+        this.name = name;
     }
 
-    public void setIPAddress(String IPAddress) {
-        this.IPAddress = IPAddress;
+    public String getName() {
+        return name;
     }
 
-    public void setPort(String port) {
-        this.port = port;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIPAddress() {
         return IPAddress;
     }
 
-    public String getPort() {
-        return port;
+    public void setIPAddress(String IPAddress) {
+        this.IPAddress = IPAddress;
     }
+
 }
