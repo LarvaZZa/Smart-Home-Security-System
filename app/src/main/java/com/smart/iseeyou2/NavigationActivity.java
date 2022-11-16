@@ -3,6 +3,7 @@ package com.smart.iseeyou2;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class NavigationActivity extends Activity implements RecyclerAdapter.OnItemClickListener {
 
@@ -31,25 +33,30 @@ public class NavigationActivity extends Activity implements RecyclerAdapter.OnIt
     private EditText popup_ipAddress, popup_name;
     private Button popup_save, popup_cancel;
 
+    private SharedPreferences settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         recyclerView = findViewById(R.id.recyclerView);
         addButton = findViewById(R.id.addButton);
+        settings = getApplicationContext().getSharedPreferences("Camera", 0);
 
-        setCameraList();
+        updateCameraList();
         setAdapter();
 
         addButton.setOnClickListener(view -> {
             createNewDialog();
             activateAddDialog();
         });
+
     }
 
-    private void setCameraList() {
-        cameraList.add(new Camera("130.89.143.216", "Living room"));
-        cameraList.add(new Camera("130.89.173.123", "Work room"));
+    private void updateCameraList() {
+        for (Map.Entry<String, ?> entry : settings.getAll().entrySet()){
+            cameraList.add(new Camera(entry.getKey(), (String) entry.getValue()));
+        }
     }
 
     private void setAdapter() {
@@ -74,9 +81,18 @@ public class NavigationActivity extends Activity implements RecyclerAdapter.OnIt
 
     public void activateAddDialog(){
         dialog.show();
+        popup_ipAddress.setHint("IP Address");
+        popup_name.setHint("Location");
         popup_save.setText("add");
         popup_save.setOnClickListener(view -> {
-            cameraList.add(new Camera(popup_ipAddress.getText().toString(), popup_name.getText().toString()));
+            String IPAddress = popup_ipAddress.getText().toString();
+            String name = popup_name.getText().toString();
+            //shared preferences
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(IPAddress, name);
+            editor.apply();
+            //camera list
+            cameraList.add(new Camera(IPAddress, name));
             recyclerAdapter.notifyDataSetChanged();
             dialog.dismiss();
         });
@@ -90,8 +106,16 @@ public class NavigationActivity extends Activity implements RecyclerAdapter.OnIt
         popup_name.setText(cameraList.get(position).getName());
         popup_ipAddress.setText(cameraList.get(position).getIPAddress());
         popup_save.setOnClickListener(view -> {
-            cameraList.get(position).setName(popup_name.getText().toString());
-            cameraList.get(position).setIPAddress(popup_ipAddress.getText().toString());
+            String IPAddress = popup_ipAddress.getText().toString();
+            String name = popup_name.getText().toString();
+            //shared preferences
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove(cameraList.get(position).getIPAddress());
+            editor.putString(IPAddress, name);
+            editor.apply();
+            //camera list
+            cameraList.get(position).setName(name);
+            cameraList.get(position).setIPAddress(IPAddress);
             recyclerAdapter.notifyDataSetChanged();
             dialog.dismiss();
         });
@@ -115,6 +139,11 @@ public class NavigationActivity extends Activity implements RecyclerAdapter.OnIt
     @Override
     public void onRemoveClick(int position) {
         createNewDialog();
+        //shared preferences
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(cameraList.get(position).getIPAddress());
+        editor.apply();
+        //camera list
         cameraList.remove(position);
         recyclerAdapter.notifyItemRemoved(position);
     }
